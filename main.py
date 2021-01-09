@@ -1,5 +1,5 @@
-from tkinter import *
-from PIL import ImageTk, Image
+from tkinter import NW, Canvas, Tk
+from PIL import ImageTk
 
 root = Tk()
 root.state('zoomed')
