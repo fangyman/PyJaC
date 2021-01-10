@@ -1,26 +1,21 @@
 from tkinter import Tk, Canvas, NW
 from PIL import ImageTk, Image
 from random import randint
+import pygame
 
-root = Tk()
-root.update()
-root.title('Bouncing DVD')
-root.state('zoomed')
-root.geometry('800x600')
+pygame.init()
 
-width = root.winfo_width()
-height = root.winfo_height()
+root = pygame.display.set_mode((1920, 1017)) # Sets the window size
+screen_size = pygame.display.get_surface() # gets the surface size
+pygame.display.set_caption('Bouncing DVD') # sets the caption of the window
+image = pygame.image.load('dvd.jpg') # loads up the image
+CONSTANTS = {'x_move': 2, 
+            'y_move': 2, 
+            'x': randint(0, screen_size.get_width() - image.get_width()), 
+            'y':randint(0, screen_size.get_height() - image.get_height())} # constants
 
-img = ImageTk.PhotoImage(file="windows.webp")
-
-c = Canvas(root, bg='black')
-c.pack(fill="both", expand=True)
-
-
-image = c.create_image(randint(0, 800), randint(0, 600), anchor=NW, image=img)  # Main image
-
-x_move = 3
-y_move = 3
+black = (0, 0, 0) # background color to fill in rgb values
+timer = pygame.time.Clock() # clock to update the frames
 
 
 def moving():
@@ -28,15 +23,22 @@ def moving():
     Moves the image by changing its coordinates at incremental values. When the image hits one of the sides of the screen
     the value becomes negative.
     '''
-    global x_move, y_move
-    c.move(image, x_move, y_move)
-    if c.coords(image)[0] + img.width() >= width or c.coords(image)[0] <= 0:
-        x_move = -x_move
-    if c.coords(image)[1] + img.height() >= height or c.coords(image)[1] <= 0:
-        y_move = -y_move
-    root.after(8, moving)
+    global CONSTANTS
+    if CONSTANTS['x'] + image.get_width() >=screen_size.get_width() or CONSTANTS['x'] <= 0:
+        CONSTANTS['x_move'] = -CONSTANTS['x_move']
+    if CONSTANTS['y'] + image.get_height() >= screen_size.get_height() or CONSTANTS['y'] <= 0:
+        CONSTANTS['y_move'] = -CONSTANTS['y_move']
+    CONSTANTS['x'] += CONSTANTS['x_move']
+    CONSTANTS['y'] += CONSTANTS['y_move']
+    root.blit(image, (CONSTANTS['x'], CONSTANTS['y']))
 
 
-moving()
-
-root.mainloop()
+while True:
+    root.fill(black) 
+    moving()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+    pygame.display.update()
+    timer.tick(50)
