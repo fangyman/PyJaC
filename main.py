@@ -1,5 +1,6 @@
 from tkinter import Tk, Canvas, NW
 from PIL import ImageTk, Image
+from random import randint
 
 root = Tk()
 root.update()
@@ -10,12 +11,13 @@ root.geometry('800x600')
 width = root.winfo_width()
 height = root.winfo_height()
 
-img = ImageTk.PhotoImage(file="bouncing_dvd_logo.jpg")
+img = ImageTk.PhotoImage(file="windows.webp")
 
 c = Canvas(root, bg='black')
 c.pack(fill="both", expand=True)
 
-image = c.create_image(60, 50, anchor=NW, image=img)  # Main image
+
+image = c.create_image(randint(0, 800), randint(0, 600), anchor=NW, image=img)  # Main image
 
 x_move = 3
 y_move = 3
