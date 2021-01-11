@@ -8,7 +8,7 @@ pygame.init()
 root = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen_size = pygame.display.get_surface()  # gets the surface size
 pygame.display.set_caption('Bouncing DVD')  # sets the caption of the window
-image = pygame.image.load('rowlett.png')  # loads up the image
+image = pygame.image.load('dvd.jpg')  # loads up the image
 
 CONSTANTS = {'x_move': 3,
              'y_move': 3,
@@ -17,8 +17,12 @@ CONSTANTS = {'x_move': 3,
 
 black = (0, 0, 0)  # background color to fill in rgb values
 timer = pygame.time.Clock()  # clock to update the frames
-slider = Slider(root, screen_size.get_width() - 80, 0, 60, 40, min=0,
-                max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15)
+xslider = Slider(root, 20, 0, 60, 40, min=0,
+                max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15, text="",
+                 textColor=(255, 255, 255))
+yslider = Slider(root, screen_size.get_width() - 80, 0, 60, 40, min=0,
+                max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15, text="y speed",
+                 textColor=(255, 255, 255))
 
 
 def moving():
@@ -45,12 +49,20 @@ while True:
             quit()
 
     events = pygame.event.get()
-    slider.listen(events)
-    slider.draw()
+    xslider.listen(events)
+    xslider.draw()
     if CONSTANTS['x_move'] > 0:
-        CONSTANTS['x_move'] = slider.getValue()
+        CONSTANTS['x_move'] = xslider.getValue()
     else:
-        CONSTANTS['x_move'] = -slider.getValue()
+        CONSTANTS['x_move'] = -xslider.getValue()
+
+    yslider.listen(events)
+    yslider.draw()
+    if CONSTANTS['y_move'] > 0:
+        CONSTANTS['y_move'] = yslider.getValue()
+    else:
+        CONSTANTS['y_move'] = -yslider.getValue()
+
     moving()
 
     pygame.display.update()
