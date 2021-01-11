@@ -1,16 +1,14 @@
-from tkinter import Tk, Canvas, NW
-from PIL import ImageTk, Image
+from tkinter import Tk
 from random import randint
 import pygame
 
 pygame.init()
-
-root = pygame.display.set_mode((1920, 1017)) # Sets the window size
+root = pygame.display.set_mode((0, 0), pygame.FULLSCREEN) # Sets the application to full screen
 screen_size = pygame.display.get_surface() # gets the surface size
 pygame.display.set_caption('Bouncing DVD') # sets the caption of the window
-image = pygame.image.load('dvd.jpg') # loads up the image
-CONSTANTS = {'x_move': 2, 
-            'y_move': 2, 
+image = pygame.image.load('rowlett.png') # loads up the image
+CONSTANTS = {'x_move': 3, 
+            'y_move': 3, 
             'x': randint(0, screen_size.get_width() - image.get_width()), 
             'y':randint(0, screen_size.get_height() - image.get_height())} # constants
 
@@ -41,4 +39,4 @@ while True:
             pygame.quit()
             quit()
     pygame.display.update()
-    timer.tick(50)
+    timer.tick(30)
