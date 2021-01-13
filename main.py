@@ -1,8 +1,10 @@
-from tkinter import Tk
+from tkinter import filedialog, Tk
 from random import randint
 import pygame
-from pygame_widgets import Slider
+from pygame_widgets import Slider, Button
+import easygui
 
+global image
 pygame.init()
 # Sets the application to full screen
 root = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -18,12 +20,17 @@ CONSTANTS = {'x_move': 3,
 black = (0, 0, 0)  # background color to fill in rgb values
 timer = pygame.time.Clock()  # clock to update the frames
 xslider = Slider(root, 20, 0, 60, 40, min=0,
-                max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15, text="",
+                 max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15, text="x",
                  textColor=(255, 255, 255))
 yslider = Slider(root, screen_size.get_width() - 80, 0, 60, 40, min=0,
-                max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15, text="y speed",
+                 max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15, text="y speed",
                  textColor=(255, 255, 255))
+quitButton = Button(root, screen_size.get_width() - 80, screen_size.get_height() - 80, 50, 50,  text='Quit',
+                     fontSize=20, margin=20, inactiveColour=(250, 0, 0), radius=20, onClick=lambda: pygame.quit())
 
+
+fileButton = Button(root, 20, screen_size.get_height() - 80, 100, 60,  text='File Select',
+                     fontSize=20, margin=10, inactiveColour=(250, 0, 0), radius=20)
 
 def moving():
     '''
@@ -47,6 +54,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+        # or MOUSEBUTTONDOWN depending on what you want.
+        if event.type == pygame.MOUSEBUTTONUP:
+            print(event.pos)
 
     events = pygame.event.get()
     xslider.listen(events)
@@ -62,7 +72,10 @@ while True:
         CONSTANTS['y_move'] = yslider.getValue()
     else:
         CONSTANTS['y_move'] = -yslider.getValue()
-
+    quitButton.listen(events)
+    quitButton.draw()
+    fileButton.listen(events)
+    fileButton.draw()
     moving()
 
     pygame.display.update()
