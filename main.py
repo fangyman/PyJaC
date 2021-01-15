@@ -1,7 +1,7 @@
 from tkinter import filedialog, Tk
 from random import randint
 import pygame
-from pygame_widgets import Slider, Button
+from pygame_widgets import Slider, Button, TextBox
 import easygui
 
 global image
@@ -19,15 +19,16 @@ CONSTANTS = {'x_move': 3,
 
 black = (0, 0, 0)  # background color to fill in rgb values
 timer = pygame.time.Clock()  # clock to update the frames
-xslider = Slider(root, screen_size.get_width() - 80, 50, 60, 40, min=0,
-                 max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15)
+xslider = Slider(root, screen_size.get_width() - 80, 100, 60, 40, min=0,
+                 max=50, step=1, colour=(220,174,150), handleColour=(255, 255, 255), handleRadius=15, curved=True)
+xtextbox = TextBox(root, screen_size.get_width() - 100, 150, 100, 40, fontSize=15, borderColour=(91,100,103))
 yslider = Slider(root, screen_size.get_width() - 80, 0, 60, 40, min=0,
-                 max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15)
+                 max=50, step=1, colour=(220,174,150), handleColour=(255, 255, 255), handleRadius=15, curved=True)
+ytextbox = TextBox(root, screen_size.get_width() - 100, 50, 100, 40, fontSize=15,  borderColour=(91,100,103))
 quitButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 80, 100, 50, text='Quit',
-                    fontSize=20, margin=20, inactiveColour=(250, 0, 0), radius=20, onClick=lambda: pygame.quit())
+                    fontSize=20, margin=20, inactiveColour=(220,174,150), radius=20, onClick=lambda: pygame.quit())
 fileButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 150, 100, 60, text='File Select',
-                    fontSize=20, margin=10, inactiveColour=(250, 0, 0), radius=20,
-                    onClick=lambda: pygame.image.load(easygui.fileopenbox()))
+                    fontSize=20, margin=10, inactiveColour=(220,174,150), radius=20)
 FB = pygame.Rect(screen_size.get_width() - 100, screen_size.get_height() - 150, 100, 60)
 
 
@@ -48,7 +49,7 @@ def moving():
 
 while True:
     root.fill(black)
-    pygame.draw.rect(root, (255, 255, 255),
+    pygame.draw.rect(root, (91,100,103),
                      pygame.Rect(screen_size.get_width() - 100, 0, 100, screen_size.get_height()))
 
     for event in pygame.event.get():
@@ -70,6 +71,8 @@ while True:
     events = pygame.event.get()
     xslider.listen(events)
     xslider.draw()
+    xtextbox.setText(f"X-speed: {xslider.getValue()}")
+    xtextbox.draw()
     if CONSTANTS['x_move'] > 0:
         CONSTANTS['x_move'] = xslider.getValue()
         if xslider.getValue() != 0:
@@ -86,6 +89,8 @@ while True:
 
     yslider.listen(events)
     yslider.draw()
+    ytextbox.setText(f"Y-speed: {yslider.getValue()}")
+    ytextbox.draw()
     if CONSTANTS['y_move'] > 0:
         CONSTANTS['y_move'] = yslider.getValue()
         if yslider.getValue() != 0:
