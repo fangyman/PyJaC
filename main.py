@@ -71,7 +71,7 @@ while True:
     events = pygame.event.get()
     xslider.listen(events)
     xslider.draw()
-    xtextbox.setText(f"X-speed: {xslider.getValue()}")
+    xtextbox.setText(f"x-speed: {xslider.getValue()}")
     xtextbox.draw()
     if CONSTANTS['x_move'] > 0:
         CONSTANTS['x_move'] = xslider.getValue()
@@ -89,7 +89,7 @@ while True:
 
     yslider.listen(events)
     yslider.draw()
-    ytextbox.setText(f"Y-speed: {yslider.getValue()}")
+    ytextbox.setText(f"y-speed: {yslider.getValue()}")
     ytextbox.draw()
     if CONSTANTS['y_move'] > 0:
         CONSTANTS['y_move'] = yslider.getValue()
