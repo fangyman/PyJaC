@@ -9,7 +9,7 @@ pygame.init()
 # Sets the application to full screen
 root = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen_size = pygame.display.get_surface()  # gets the surface size
-pygame.display.set_caption('Bouncing DVD')  # sets the caption of the window
+pygame.display.set_caption('Bouncing Windows')  # sets the caption of the window
 image = pygame.image.load('dvd.jpg')  # loads up the image
 
 CONSTANTS = {'x_move': 3,
@@ -23,13 +23,12 @@ xslider = Slider(root, screen_size.get_width() - 80, 50, 60, 40, min=0,
                  max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15)
 yslider = Slider(root, screen_size.get_width() - 80, 0, 60, 40, min=0,
                  max=50, step=1, colour=(255, 0, 0), handleColour=(255, 255, 255), handleRadius=15)
-quitButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 80, 100, 50,  text='Quit',
-                     fontSize=20, margin=20, inactiveColour=(250, 0, 0), radius=20, onClick=lambda: pygame.quit())
-
-
-fileButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 150, 100, 60,  text='File Select',
-                     fontSize=20, margin=10, inactiveColour=(250, 0, 0), radius=20)
-
+quitButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 80, 100, 50, text='Quit',
+                    fontSize=20, margin=20, inactiveColour=(250, 0, 0), radius=20, onClick=lambda: pygame.quit())
+fileButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 150, 100, 60, text='File Select',
+                    fontSize=20, margin=10, inactiveColour=(250, 0, 0), radius=20,
+                    onClick=lambda: pygame.image.load(easygui.fileopenbox()))
+FB = pygame.Rect(screen_size.get_width() - 100, screen_size.get_height() - 150, 100, 60)
 
 
 def moving():
@@ -49,12 +48,23 @@ def moving():
 
 while True:
     root.fill(black)
-    pygame.draw.rect(root, (255,255,255), pygame.Rect(screen_size.get_width() - 100, 0, 100, screen_size.get_height())) 
+    pygame.draw.rect(root, (255, 255, 255),
+                     pygame.Rect(screen_size.get_width() - 100, 0, 100, screen_size.get_height()))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                if FB.collidepoint(event.pos):
+                    file = easygui.fileopenbox()
+                    checkfile = file.split(".")
+                    if file is not None and checkfile != "py" and checkfile != "md":
+                        image = pygame.image.load(file)
+                        CONSTANTS['x'] = randint(0, screen_size.get_width() - image.get_width() - 100)
+                        CONSTANTS['y'] = randint(0, screen_size.get_height() - image.get_height())
+                        pygame.display.update()
 
     events = pygame.event.get()
     xslider.listen(events)
