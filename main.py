@@ -59,12 +59,13 @@ while True:
             if event.button == 1:
                 if FB.collidepoint(event.pos):
                     file = easygui.fileopenbox()
-                    checkfile = file.split(".")
-                    if file is not None and checkfile != "py" and checkfile != "md":
-                        image = pygame.image.load(file)
-                        CONSTANTS['x'] = randint(0, screen_size.get_width() - image.get_width() - 100)
-                        CONSTANTS['y'] = randint(0, screen_size.get_height() - image.get_height())
-                        pygame.display.update()
+                    if file is not None:
+                        checkfile = file.split(".")
+                        if checkfile[len(checkfile)-1] != "py" and checkfile[len(checkfile)-1] != "md":
+                            image = pygame.image.load(file)
+                            CONSTANTS['x'] = randint(0, screen_size.get_width() - image.get_width() - 100)
+                            CONSTANTS['y'] = randint(0, screen_size.get_height() - image.get_height())
+                            pygame.display.update()
 
     events = pygame.event.get()
     xslider.listen(events)
