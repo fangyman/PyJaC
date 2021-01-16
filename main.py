@@ -9,27 +9,31 @@ pygame.init()
 # Sets the application to full screen
 root = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen_size = pygame.display.get_surface()  # gets the surface size
-pygame.display.set_caption('Bouncing Windows')  # sets the caption of the window
+# sets the caption of the window
+pygame.display.set_caption('Bouncing Windows')
 image = pygame.image.load('dvd.jpg')  # loads up the image
 
-CONSTANTS = {'x_move': 3,
-             'y_move': 3,
+CONSTANTS = {'x_move': 1,
+             'y_move': 1,
              'x': randint(0, screen_size.get_width() - image.get_width() - 100),
              'y': randint(0, screen_size.get_height() - image.get_height())}  # constants
 
 black = (0, 0, 0)  # background color to fill in rgb values
 timer = pygame.time.Clock()  # clock to update the frames
 xslider = Slider(root, screen_size.get_width() - 80, 100, 60, 40, min=0,
-                 max=50, step=1, colour=(220,174,150), handleColour=(255, 255, 255), handleRadius=15, curved=True)
-xtextbox = TextBox(root, screen_size.get_width() - 100, 150, 100, 40, fontSize=15, borderColour=(91,100,103))
+                 max=20, step=1, colour=(220, 174, 150), handleColour=(255, 255, 255), handleRadius=15, curved=True)
+xtextbox = TextBox(root, screen_size.get_width() - 100, 150,
+                   100, 40, fontSize=15, borderColour=(91, 100, 103))
 yslider = Slider(root, screen_size.get_width() - 80, 0, 60, 40, min=0,
-                 max=50, step=1, colour=(220,174,150), handleColour=(255, 255, 255), handleRadius=15, curved=True)
-ytextbox = TextBox(root, screen_size.get_width() - 100, 50, 100, 40, fontSize=15,  borderColour=(91,100,103))
-quitButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 80, 100, 50, text='Quit',
-                    fontSize=20, margin=20, inactiveColour=(220,174,150), radius=20, onClick=lambda: pygame.quit())
+                 max=20, step=1, colour=(220, 174, 150), handleColour=(255, 255, 255), handleRadius=15, curved=True)
+ytextbox = TextBox(root, screen_size.get_width() - 100, 50,
+                   100, 40, fontSize=15,  borderColour=(91, 100, 103))
+quitButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 80, 100, 60, text='Quit',
+                    fontSize=20, margin=20, inactiveColour=(220, 174, 150), radius=20, onClick=lambda: pygame.quit())
 fileButton = Button(root, screen_size.get_width() - 100, screen_size.get_height() - 150, 100, 60, text='File Select',
-                    fontSize=20, margin=10, inactiveColour=(220,174,150), radius=20)
-FB = pygame.Rect(screen_size.get_width() - 100, screen_size.get_height() - 150, 100, 60)
+                    fontSize=20, margin=10, inactiveColour=(220, 174, 150), radius=20)
+FB = pygame.Rect(screen_size.get_width() - 100,
+                 screen_size.get_height() - 150, 100, 60)
 
 
 def moving():
@@ -49,7 +53,7 @@ def moving():
 
 while True:
     root.fill(black)
-    pygame.draw.rect(root, (91,100,103),
+    pygame.draw.rect(root, (91, 100, 103),
                      pygame.Rect(screen_size.get_width() - 100, 0, 100, screen_size.get_height()))
 
     for event in pygame.event.get():
@@ -62,17 +66,24 @@ while True:
                     file = easygui.fileopenbox()
                     if file is not None:
                         checkfile = file.split(".")
-                        if checkfile[len(checkfile)-1] != "py" and checkfile[len(checkfile)-1] != "md":
-                            image = pygame.image.load(file)
-                            CONSTANTS['x'] = randint(0, screen_size.get_width() - image.get_width() - 100)
-                            CONSTANTS['y'] = randint(0, screen_size.get_height() - image.get_height())
-                            pygame.display.update()
+                        if checkfile[len(checkfile)-1] == "jpg" or checkfile[len(checkfile)-1] == "png":
+                            new_image = pygame.image.load(file)
+                            if screen_size.get_width() - new_image.get_width() - 100 > 0 and screen_size.get_height() - new_image.get_height() > 0:
+                                image = new_image
+                                CONSTANTS['x'] = randint(
+                                    0, screen_size.get_width() - image.get_width() - 100)
+                                CONSTANTS['y'] = randint(
+                                    0, screen_size.get_height() - image.get_height())
+                                pygame.display.update()
 
     events = pygame.event.get()
     xslider.listen(events)
     xslider.draw()
     xtextbox.setText(f"X-speed: {xslider.getValue()}")
     xtextbox.draw()
+    '''
+    Remembering the momentum in the x direction
+    '''
     if CONSTANTS['x_move'] > 0:
         CONSTANTS['x_move'] = xslider.getValue()
         if xslider.getValue() != 0:
@@ -91,6 +102,9 @@ while True:
     yslider.draw()
     ytextbox.setText(f"Y-speed: {yslider.getValue()}")
     ytextbox.draw()
+    '''
+    Remembering the momentum in the y direction
+    '''
     if CONSTANTS['y_move'] > 0:
         CONSTANTS['y_move'] = yslider.getValue()
         if yslider.getValue() != 0:
@@ -111,4 +125,4 @@ while True:
     moving()
 
     pygame.display.update()
-    timer.tick(30)
+    timer.tick(60)
