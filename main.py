@@ -79,7 +79,7 @@ while True:
     events = pygame.event.get()
     xslider.listen(events)
     xslider.draw()
-    xtextbox.setText(f"x-speed: {xslider.getValue()}")
+    xtextbox.setText(f"X-speed: {xslider.getValue()}")
     xtextbox.draw()
     '''
     Remembering the momentum in the x direction
@@ -100,7 +100,7 @@ while True:
 
     yslider.listen(events)
     yslider.draw()
-    ytextbox.setText(f"y-speed: {yslider.getValue()}")
+    ytextbox.setText(f"Y-speed: {yslider.getValue()}")
     ytextbox.draw()
     '''
     Remembering the momentum in the y direction
