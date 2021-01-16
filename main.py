@@ -3,6 +3,7 @@ from random import randint
 import pygame
 from pygame_widgets import Slider, Button, TextBox
 import easygui
+import os
 
 global image
 pygame.init()
@@ -34,6 +35,8 @@ fileButton = Button(root, screen_size.get_width() - 100, screen_size.get_height(
                     fontSize=20, margin=10, inactiveColour=(220, 174, 150), radius=20)
 FB = pygame.Rect(screen_size.get_width() - 100,
                  screen_size.get_height() - 150, 100, 60)
+textbox = TextBox(root, screen_size.get_width() - 100, 200,
+                                100,50, fontSize=15,  borderColour=(91, 100, 103))
 
 
 def moving():
@@ -61,20 +64,23 @@ while True:
             pygame.quit()
             quit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                if FB.collidepoint(event.pos):
-                    file = easygui.fileopenbox()
-                    if file is not None:
-                        checkfile = file.split(".")
-                        if checkfile[len(checkfile)-1] == "jpg" or checkfile[len(checkfile)-1] == "png":
-                            new_image = pygame.image.load(file)
-                            if screen_size.get_width() - new_image.get_width() - 100 > 0 and screen_size.get_height() - new_image.get_height() > 0:
-                                image = new_image
-                                CONSTANTS['x'] = randint(
-                                    0, screen_size.get_width() - image.get_width() - 100)
-                                CONSTANTS['y'] = randint(
-                                    0, screen_size.get_height() - image.get_height())
-                                pygame.display.update()
+            if event.button == 1 and FB.collidepoint(event.pos):
+                file = easygui.fileopenbox()
+                if file is not None:
+                    checkfile = file.split(".")
+                    if checkfile[len(checkfile)-1] == "jpg" or checkfile[len(checkfile)-1] == "png" and os.path.getsize(file) <= 52428800:
+                        new_image = pygame.image.load(file)
+                        if screen_size.get_width() - new_image.get_width() - 100 > 0 and screen_size.get_height() - new_image.get_height() > 0:
+                            image = new_image
+                            CONSTANTS['x'] = randint(
+                                0, screen_size.get_width() - image.get_width() - 100)
+                            CONSTANTS['y'] = randint(
+                                0, screen_size.get_height() - image.get_height())
+                            pygame.display.update()
+                        textbox.setText("Image Loaded")
+                    else:                        
+                        textbox.setText("Wrong file type")
+    textbox.draw()
 
     events = pygame.event.get()
     xslider.listen(events)
