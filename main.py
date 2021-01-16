@@ -56,8 +56,6 @@ def moving():
 
 while True:
     root.fill(black)
-    pygame.draw.rect(root, (91, 100, 103),
-                     pygame.Rect(screen_size.get_width() - 100, 0, 100, screen_size.get_height()))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -80,9 +78,12 @@ while True:
                         textbox.setText("Image Loaded")
                     else:                        
                         textbox.setText("Wrong file type")
-    textbox.draw()
 
     events = pygame.event.get()
+    moving()
+    pygame.draw.rect(root, (91, 100, 103),
+                     pygame.Rect(screen_size.get_width() - 100, 0, 100, screen_size.get_height()))
+    textbox.draw()
     xslider.listen(events)
     xslider.draw()
     xtextbox.setText(f"X-speed: {xslider.getValue()}")
@@ -128,7 +129,6 @@ while True:
     quitButton.draw()
     fileButton.listen(events)
     fileButton.draw()
-    moving()
 
     pygame.display.update()
     timer.tick(60)
